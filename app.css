@@ -1,0 +1,8 @@
+body {
+  font-family: "helvetica neue";
+}
+
+.stair-line {
+  stroke: white;
+  stroke-width: 4px;
+}
