@@ -6,7 +6,7 @@ const line = shape.line();
 
 function renderStairs(flightSpecs) {
   var stairSpecs = convertFlightSpecsToStairSpecs(flightSpecs);
-  var floorPositions = deriveFloorPositionsFromFlightSpecs(flightSpecs);
+  var floorPositions = deriveFloorPositionsFromStairSpecs(stairSpecs);
 
   var stairsLayer = d3.select('.stairs-layer');
   var stairs = stairsLayer.selectAll('.stair-line').data(stairSpecs, accessor());
@@ -81,25 +81,24 @@ function convertFlightSpecsToStairSpecs(flightSpecs) {
 
     var spec = {
       id: 'stairs-' + flightSpec.id,
-      points: makeStairPoints(opts)
+      points: makeStairPoints(opts),
+      floorAtBottom: flightSpec.floorAtBottom
     };
     lastActualEnd = spec.points[spec.points.length - 1];
+
     return spec;
   }
 }
 
-function deriveFloorPositionsFromFlightSpecs(flightSpecs) {
+function deriveFloorPositionsFromStairSpecs(stairSpecs) {
   var floorPositions = [];
-  var y = 0;
-
-  flightSpecs.forEach(addFloor);
+  
+  stairSpecs.forEach(addFloor);
   return floorPositions;
 
-  function addFloor(flightSpec) {
-    y += flightSpec.vector[1];
-
-    if (flightSpec.floorAtBottom) {
-      floorPositions.push(y);
+  function addFloor(stairSpec) {
+    if (stairSpec.floorAtBottom) {
+      floorPositions.push(stairSpec.points[stairSpec.points.length - 1][1]);
     }
   }
 }
