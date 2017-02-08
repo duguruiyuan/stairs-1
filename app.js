@@ -36,7 +36,7 @@ function route() {
   //   }
   // ]);
   var flightSpecs = generateFlightSpecs(10, 800);
-  console.log(JSON.stringify(flightSpecs, null, '  '));
+  // console.log(JSON.stringify(flightSpecs, null, '  '));
   renderStairs(flightSpecs);
 }
 
@@ -66,6 +66,7 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
         spec.vector[0] *= -1;
       }
 
+      console.log('spec.vector[0]', spec.vector[0])
       // Keep all the flights inside the board bounds.
       if (lastX + spec.vector[0] > boardWidth) {
         spec.vector[0] = boardWidth - lastX;
@@ -80,6 +81,7 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
     lastSpec = spec;
     lastX += lastSpec.vector[0];
     lastY += lastSpec.vector[1];
+    console.log('lastX', lastX)
   }
 
   return specs;

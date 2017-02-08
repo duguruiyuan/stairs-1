@@ -8,8 +8,6 @@ function renderStairs(flightSpecs) {
   var stairSpecs = convertFlightSpecsToStairSpecs(flightSpecs);
   var floorPositions = deriveFloorPositionsFromFlightSpecs(flightSpecs);
 
-  console.log('stairSpecs', JSON.stringify(stairSpecs, null, '  '));
-
   var stairsLayer = d3.select('.stairs-layer');
   var stairs = stairsLayer.selectAll('.stair-line').data(stairSpecs, accessor());
   stairs.exit().remove();
@@ -53,7 +51,7 @@ function makeStairPoints({start, endNear, stepWidth, stepHeight, startHorizontal
 
     moveHorizontallyNext = !moveHorizontallyNext;
   }
-  while ((xStep > 0 ? nextPoint[0] <= endNear[0] : nextPoint[0] >= endNear[0]) ||
+  while ((xStep > 0 ? nextPoint[0] <= endNear[0] : nextPoint[0] >= endNear[0]) &&
     (yStep > 0 ? nextPoint[1] <= endNear[1] : nextPoint[1] >= endNear[1]));
 
   return points;
