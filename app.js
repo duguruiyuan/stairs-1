@@ -57,6 +57,14 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
       startHorizontally: true
     };
 
+    if (i === 0) {
+      spec.overrideStartY = 2;
+    }
+    else if (probable.roll(3) === 0) {
+      // Move the x position of the flight to somewhere random.
+      spec.overrideStartX = 500;// probable.roll(boardWidth);
+    }
+
     spec.stepWidth = spec.vector[0] / (5 + probable.roll(10));
     spec.stepHeight = spec.vector[1] / (5 + probable.roll(10));
 
@@ -73,7 +81,7 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
       else if (lastX + spec.vector[0] < 0) {
         spec.vector[0] = -lastX;
       }
-      spec.startHorizontally = !lastSpec.startHorizontally;
+      spec.startHorizontally = probable.roll(2) === 0;
     }
 
     specs.push(spec);

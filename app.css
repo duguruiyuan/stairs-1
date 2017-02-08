@@ -1,5 +1,6 @@
 body {
   font-family: "helvetica neue";
+  background-color: black;
 }
 
 .stair-line {
@@ -9,6 +10,6 @@ body {
 }
 
 .floor-line {
-  stroke: white;
+  fill: white;
   stroke-width: 4px;
 }
