@@ -28,18 +28,18 @@ function renderStairs(flightSpecs) {
 }
 
 function getPathFromStairSpec(stairSpec) {
-  return line(makeStairPoints(stairSpec));
+  return line(stairSpec.points);
 }
 
-function makeStairPoints({start, end, stepWidth, stepHeight, startHorizontally}) {
+function makeStairPoints({start, endNear, stepWidth, stepHeight, startHorizontally}) {
   if (startHorizontally === undefined) {
     startHorizontally = true;
   }
   var points = [];
   var nextPoint = start;
   var moveHorizontallyNext = startHorizontally;
-  var xStep = end[0] > start[0] ? stepWidth : - stepWidth;
-  var yStep = end[1] > start[1] ? stepHeight : - stepHeight;
+  var xStep = endNear[0] > start[0] ? stepWidth : - stepWidth;
+  var yStep = endNear[1] > start[1] ? stepHeight : - stepHeight;
 
   do {
     points.push(nextPoint);
@@ -53,37 +53,40 @@ function makeStairPoints({start, end, stepWidth, stepHeight, startHorizontally})
 
     moveHorizontallyNext = !moveHorizontallyNext;
   }
-  while ((xStep > 0 ? nextPoint[0] <= end[0] : nextPoint[0] >= end[0]) ||
-    (yStep > 0 ? nextPoint[1] <= end[1] : nextPoint[1] >= end[1]));
+  while ((xStep > 0 ? nextPoint[0] <= endNear[0] : nextPoint[0] >= endNear[0]) ||
+    (yStep > 0 ? nextPoint[1] <= endNear[1] : nextPoint[1] >= endNear[1]));
 
   return points;
 }
 
 function convertFlightSpecsToStairSpecs(flightSpecs) {
-  var lastFlightSpec;
+  var lastActualEnd;
   return flightSpecs.map(convertFlightSpecToStairSpecs);
 
-  function convertFlightSpecToStairSpecs(flightSpec) {
-    var stairSpec = {
-      id: 'stairs-' + flightSpec.id,
+  function convertFlightSpecToStairSpecs(flightSpec, i) {
+    var opts = {
       stepWidth: flightSpec.stepWidth,
       stepHeight: flightSpec.stepHeight,
       startHorizontally: flightSpec.startHorizontally
     };
-    if (lastFlightSpec) {
-      stairSpec.start = lastFlightSpec.end;
-      stairSpec.end = [
-        lastFlightSpec.end[0] + flightSpec.vector[0],
-        lastFlightSpec.end[1] + flightSpec.vector[1]
+    if (i > 0) {
+      opts.start = lastActualEnd;
+      opts.endNear = [
+        lastActualEnd[0] + flightSpec.vector[0],
+        lastActualEnd[1] + flightSpec.vector[1]
       ];
     }
     else {
-      stairSpec.start = [0, 0];
-      stairSpec.end = flightSpec.vector;
+      opts.start = [0, 0];
+      opts.endNear = flightSpec.vector;
     }
 
-    lastFlightSpec = stairSpec;
-    return stairSpec;
+    var spec = {
+      id: 'stairs-' + flightSpec.id,
+      points: makeStairPoints(opts)
+    };
+    lastActualEnd = spec.points[spec.points.length - 1];
+    return spec;
   }
 }
 

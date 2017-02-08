@@ -49,6 +49,7 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
   for (var i = 0; i < numberOfFlights; ++i) {
     let vectorX = probable.rollDie(boardWidth);
     let vectorY = ~~(vectorX/2) + probable.roll(vectorX);
+    // TODO: Override start position.
     let spec = {
       id: randomId(4),
       vector: [vectorX, vectorY],
