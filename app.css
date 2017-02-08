@@ -5,6 +5,7 @@ body {
 .stair-line {
   stroke: white;
   stroke-width: 4px;
+  stroke-linecap: square;
 }
 
 .floor-line {
