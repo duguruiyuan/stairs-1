@@ -50,7 +50,7 @@ function addMoreStairs() {
   var startY;
 
   if (routeDict.glitchMode || !lastRenderedPoint) {
-    startX = 2;
+    startX = 2 + probable.roll(boardWidth - 4);
     startY = 2;
   }
   else {
