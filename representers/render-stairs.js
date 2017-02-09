@@ -31,6 +31,12 @@ function renderStairs({flightSpecs, leftLimit, rightLimit}) {
     .attr('width', '100%')
     .merge(floors)
       .attr('y', getFloorRectTop);
+
+  var lastStairs = stairSpecs[stairSpecs.length - 1];
+  var lastPointRendered = lastStairs.points[lastStairs.points.length - 1];
+  var board = d3.select('#board');
+  board.attr('height', lastPointRendered[1]);
+  return lastPointRendered;
 }
 
 function getPathFromStairSpec(stairSpec) {
