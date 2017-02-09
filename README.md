@@ -1,7 +1,7 @@
-wall-stairs
+wallstairs
 ==================
 
-Just wall-stairs forever!
+Just wallstairs forever!
 
 Installation
 ------------
