@@ -1,22 +1,22 @@
 {
-  "name": "wallstairs",
+  "name": "stairs",
   "version": "1.0.0",
-  "description": "Just wallstairs forever!",
+  "description": "Just stairs forever!",
   "main": "index.js",
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jimkang/wallstairs.git"
+    "url": "git@github.com:jimkang/stairs.git"
   },
   "keywords": [],
   "author": "Jim Kang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jimkang/wallstairs/issues"
+    "url": "https://github.com/jimkang/stairs/issues"
   },
-  "homepage": "https://github.com/jimkang/wallstairs",
+  "homepage": "https://github.com/jimkang/stairs",
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "babelify": "^7.3.0",
