@@ -4,20 +4,34 @@ var randomId = require('idmaker').randomId;
 var seedRandom = require('seedrandom');
 var createProbable = require('probable').createProbable;
 
-var probable = createProbable({
-  random: seedRandom('test')
-});
+var probable;
 
 const stairMarginLeft = 0;
 const boardWidth = 800;
 
 ((function go() {
+  window.onhashchange = route;
   route();
 })());
 
 function route() {
   // Skip the # part of the hash.
   var routeDict = qs.parse(window.location.hash.slice(1));
+  var seed;
+  if ('set' in routeDict) {
+    seed = routeDict.set;
+  }
+  else {
+    seed = randomId(8);
+    routeDict.set = seed;
+    var updatedURL = location.protocol + '//' + location.host + location.pathname + '#' + qs.stringify(routeDict);
+    // Sync URL without triggering onhashchange.
+    window.history.pushState(null, null, updatedURL);
+  }
+
+  probable = createProbable({
+    random: seedRandom(seed)
+  });
 
   // Routing logic.
   // Render no matter what.
@@ -47,7 +61,7 @@ function route() {
 function generateFlightSpecs(numberOfFlights, boardWidth) {
   var lastSpec;
   var lastX = 0;
-  var lastY = 0;
+  // var lastY = 0;
   var specs = [];
 
   for (var i = 0; i < numberOfFlights; ++i) {
@@ -94,7 +108,7 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
     specs.push(spec);
     lastSpec = spec;
     lastX += lastSpec.vector[0];
-    lastY += lastSpec.vector[1];
+    // lastY += lastSpec.vector[1];
   }
 
   return specs;
