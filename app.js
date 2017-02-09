@@ -2,7 +2,7 @@ var qs = require('qs');
 var wireScrolling = require('./representers/wire-scrolling');
 var renderStairs = require('./representers/render-stairs');
 var randomId = require('idmaker').randomId;
-var seedRandom = require('seedrandom');
+var seedRandom = require('./browser-seedrandom');
 var createProbable = require('probable').createProbable;
 
 var probable;
