@@ -9,7 +9,7 @@ var probable;
 
 const stairMarginLeft = 0;
 // This should be the only place outside of the representers that the DOM is touched.
-const boardWidth = document.getElementById('board').clientWidth;
+const boardWidth = document.getElementById('board').getBoundingClientRect().width;
 
 var currentFlightSpecs = [];
 var lastRenderedPoint;

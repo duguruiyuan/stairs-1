@@ -6,6 +6,10 @@ var cloneDeep = require('lodash.clonedeep');
 const line = shape.line();
 
 function renderStairs({flightSpecs, leftLimit, rightLimit, floorWidth}) {
+  if (leftLimit === rightLimit) {
+    return;
+  }
+  
   var stairSpecs = convertFlightSpecsToStairSpecs({
     flightSpecs: flightSpecs,
     leftLimit: leftLimit,
