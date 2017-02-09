@@ -72,7 +72,8 @@ function addMoreStairs() {
   lastRenderedPoint = renderStairs({
     flightSpecs: currentFlightSpecs,
     leftLimit: stairMarginLeft,
-    rightLimit: boardWidth
+    rightLimit: boardWidth,
+    floorWidth: boardWidth > 480 ? 4 : 2
   });
 }
 
@@ -105,8 +106,8 @@ function generateFlightSpecs({numberOfFlights, boardWidth, startX, startY}) {
       spec.floorAtTop = true;
     }
 
-    spec.stepWidth = spec.vector[0] / (5 + probable.roll(10));
-    spec.stepHeight = spec.vector[1] / (5 + probable.roll(10));
+    spec.stepWidth = spec.vector[0] / (5 + probable.roll(6) + probable.roll(6));
+    spec.stepHeight = spec.vector[1] / (5 + probable.roll(6) + probable.roll(6));
 
     if (lastSpec) {
       // TODO: Consider going back up.

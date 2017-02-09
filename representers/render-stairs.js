@@ -5,7 +5,7 @@ var cloneDeep = require('lodash.clonedeep');
 
 const line = shape.line();
 
-function renderStairs({flightSpecs, leftLimit, rightLimit}) {
+function renderStairs({flightSpecs, leftLimit, rightLimit, floorWidth}) {
   var stairSpecs = convertFlightSpecsToStairSpecs({
     flightSpecs: flightSpecs,
     leftLimit: leftLimit,
@@ -27,7 +27,7 @@ function renderStairs({flightSpecs, leftLimit, rightLimit}) {
   floors.enter().append('rect')
     .classed('floor-line', true)
     .attr('x', 0)
-    .attr('height', 4)
+    .attr('height', floorWidth)
     .attr('width', '100%')
     .merge(floors)
       .attr('y', getFloorRectTop);

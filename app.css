@@ -11,5 +11,9 @@ body {
 
 .floor-line {
   fill: white;
-  stroke-width: 4px;
+}
+
+@media all and (max-width: 480px) {
+.stair-line {
+  stroke-width: 2px;
 }
