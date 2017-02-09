@@ -8,7 +8,8 @@ var createProbable = require('probable').createProbable;
 var probable;
 
 const stairMarginLeft = 0;
-const boardWidth = 800;
+// This should be the only place outside of the representers that the DOM is touched.
+const boardWidth = document.getElementById('board').clientWidth;
 
 var currentFlightSpecs = [];
 var lastRenderedPoint;
