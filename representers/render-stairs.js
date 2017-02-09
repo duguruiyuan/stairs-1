@@ -9,7 +9,7 @@ function renderStairs({flightSpecs, leftLimit, rightLimit, floorWidth}) {
   if (leftLimit === rightLimit) {
     return;
   }
-  
+
   var stairSpecs = convertFlightSpecsToStairSpecs({
     flightSpecs: flightSpecs,
     leftLimit: leftLimit,
@@ -41,6 +41,10 @@ function renderStairs({flightSpecs, leftLimit, rightLimit, floorWidth}) {
   var board = d3.select('#board');
   board.attr('height', lastPointRendered[1]);
   return lastPointRendered;
+
+  function getFloorRectTop(floorCenterY) {
+    return floorCenterY - floorWidth/2;
+  }
 }
 
 function getPathFromStairSpec(stairSpec) {
@@ -143,10 +147,6 @@ function deriveFloorPositionsFromStairSpecs(stairSpecs) {
 
 function identity(x) {
   return x;
-}
-
-function getFloorRectTop(floorCenterY) {
-  return floorCenterY - 2;
 }
 
 function addPairs(a, b) {
