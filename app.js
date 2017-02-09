@@ -35,8 +35,10 @@ function route() {
     seed = randomId(8);
     routeDict.set = seed;
     var updatedURL = location.protocol + '//' + location.host + location.pathname + '#' + qs.stringify(routeDict);
-    // Sync URL without triggering onhashchange.
-    window.history.pushState(null, null, updatedURL);
+    console.log(updatedURL);
+
+    // // Sync URL without triggering onhashchange.
+    // window.history.pushState(null, null, updatedURL);
   }
 
   probable = createProbable({
