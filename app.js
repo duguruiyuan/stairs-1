@@ -92,7 +92,7 @@ function generateFlightSpecs({numberOfFlights, boardWidth, startX, startY}) {
     let spec = {
       id: randomId(4),
       vector: [vectorX, vectorY],
-      floorAtTop: probable.roll(3) === 0,
+      floorAtTop: probable.roll(4) === 0,
       startHorizontally: true
     };
 
