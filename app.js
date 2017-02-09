@@ -8,6 +8,8 @@ var probable = createProbable({
   random: seedRandom('test')
 });
 
+const stairMarginLeft = 0;
+const boardWidth = 800;
 
 ((function go() {
   route();
@@ -26,7 +28,7 @@ function route() {
   //     stepWidth: 40,
   //     stepHeight: 40,
   //     startHorizontally: false,
-  //     floorAtBottom: true
+  //     floorAtTop: true
   //   },
   //   {
   //     id: 'two',
@@ -35,9 +37,11 @@ function route() {
   //     stepHeight: 50
   //   }
   // ]);
-  var flightSpecs = generateFlightSpecs(10, 800);
+  var flightSpecs = generateFlightSpecs(10, boardWidth);
   // console.log(JSON.stringify(flightSpecs, null, '  '));
-  renderStairs(flightSpecs);
+  renderStairs({
+    flightSpecs: flightSpecs, leftLimit: stairMarginLeft, rightLimit: boardWidth
+  });
 }
 
 function generateFlightSpecs(numberOfFlights, boardWidth) {
@@ -49,11 +53,11 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
   for (var i = 0; i < numberOfFlights; ++i) {
     let vectorX = probable.rollDie(boardWidth);
     let vectorY = ~~(vectorX/2) + probable.roll(vectorX);
-    // TODO: Override start position.
+
     let spec = {
       id: randomId(4),
       vector: [vectorX, vectorY],
-      floorAtBottom: probable.roll(2) === 0,
+      floorAtTop: probable.roll(3) === 0,
       startHorizontally: true
     };
 
@@ -62,7 +66,10 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
     }
     else if (probable.roll(3) === 0) {
       // Move the x position of the flight to somewhere random.
-      spec.overrideStartX = 500;// probable.roll(boardWidth);
+      var direction = probable.roll(2) === 0 ? 1 : -1;
+      spec.overrideStartX = lastX + direction * probable.roll(boardWidth/4);
+      // Put a floor at the top of every flight that jumps over.
+      spec.floorAtTop = true;
     }
 
     spec.stepWidth = spec.vector[0] / (5 + probable.roll(10));
@@ -78,8 +85,8 @@ function generateFlightSpecs(numberOfFlights, boardWidth) {
       if (lastX + spec.vector[0] > boardWidth) {
         spec.vector[0] = boardWidth - lastX;
       }
-      else if (lastX + spec.vector[0] < 0) {
-        spec.vector[0] = -lastX;
+      else if (lastX + spec.vector[0] < stairMarginLeft) {
+        spec.vector[0] = stairMarginLeft - lastX;
       }
       spec.startHorizontally = probable.roll(2) === 0;
     }

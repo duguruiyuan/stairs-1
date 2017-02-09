@@ -5,8 +5,12 @@ var cloneDeep = require('lodash.clonedeep');
 
 const line = shape.line();
 
-function renderStairs(flightSpecs) {
-  var stairSpecs = convertFlightSpecsToStairSpecs(flightSpecs);
+function renderStairs({flightSpecs, leftLimit, rightLimit}) {
+  var stairSpecs = convertFlightSpecsToStairSpecs({
+    flightSpecs: flightSpecs,
+    leftLimit: leftLimit,
+    rightLimit: rightLimit
+  });
   var floorPositions = deriveFloorPositionsFromStairSpecs(stairSpecs);
 
   var stairsLayer = d3.select('.stairs-layer');
@@ -38,7 +42,10 @@ function getPathFromStairSpec(stairSpec) {
   return line(stairSpec.points);
 }
 
-function makeStairPoints({start, endNear, stepWidth, stepHeight, startHorizontally}) {
+function makeStairPoints({
+    start, endNear, stepWidth, stepHeight, startHorizontally, endLeftLimit, endRightLimit
+  }) {
+
   if (startHorizontally === undefined) {
     startHorizontally = true;
   }
@@ -61,12 +68,13 @@ function makeStairPoints({start, endNear, stepWidth, stepHeight, startHorizontal
     moveHorizontallyNext = !moveHorizontallyNext;
   }
   while ((xStep > 0 ? nextPoint[0] <= endNear[0] : nextPoint[0] >= endNear[0]) &&
+    (nextPoint[0] <= endRightLimit && nextPoint[0] >= endLeftLimit) &&
     (yStep > 0 ? nextPoint[1] <= endNear[1] : nextPoint[1] >= endNear[1]));
 
   return points;
 }
 
-function convertFlightSpecsToStairSpecs(flightSpecs) {
+function convertFlightSpecsToStairSpecs({flightSpecs, leftLimit, rightLimit}) {
   var lastActualEnd;
   return flightSpecs.map(convertFlightSpecToStairSpecs);
 
@@ -74,7 +82,9 @@ function convertFlightSpecsToStairSpecs(flightSpecs) {
     var opts = {
       stepWidth: flightSpec.stepWidth,
       stepHeight: flightSpec.stepHeight,
-      startHorizontally: flightSpec.startHorizontally
+      startHorizontally: flightSpec.startHorizontally,
+      endLeftLimit: leftLimit,
+      endRightLimit: rightLimit
     };
     
     if (i > 0) {
@@ -96,9 +106,11 @@ function convertFlightSpecsToStairSpecs(flightSpecs) {
     var spec = {
       id: 'stairs-' + flightSpec.id,
       points: makeStairPoints(opts),
-      floorAtBottom: flightSpec.floorAtBottom
+      floorAtTop: flightSpec.floorAtTop
     };
     lastActualEnd = cloneDeep(spec.points[spec.points.length - 1]);
+    // console.log('start', spec.points[0]);
+    // console.log('lastActualEnd', lastActualEnd);
 
     // console.log(JSON.stringify(spec.points, null, '  '));
 
@@ -113,8 +125,8 @@ function deriveFloorPositionsFromStairSpecs(stairSpecs) {
   return floorPositions;
 
   function addFloor(stairSpec) {
-    if (stairSpec.floorAtBottom) {
-      floorPositions.push(stairSpec.points[stairSpec.points.length - 1][1]);
+    if (stairSpec.floorAtTop) {
+      floorPositions.push(stairSpec.points[0][1]);
     }
   }
 }
