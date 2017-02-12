@@ -1,17 +1,22 @@
 var qs = require('qs');
-var wireScrolling = require('./representers/wire-scrolling');
+var wireEvents = require('./representers/wire-events');
 var renderStairs = require('./representers/render-stairs');
 var randomId = require('idmaker').randomId;
 var seedRandom = require('./browser-seedrandom');
 var createProbable = require('probable').createProbable;
+var AutoScroll = require('./representers/auto-scroll');
 
 var probable;
+var autoScroll;
+var autoScrollDesired = true;
+var noScrollYet = true;
 
 const stairMarginLeft = 0;
 // This should be the only place outside of the representers that the DOM is touched.
 const boardWidth = document.getElementById('board').getBoundingClientRect().width;
 
 var currentFlightSpecs = [];
+
 var lastRenderedPoint;
 var routeDict;
 
@@ -19,8 +24,11 @@ var routeDict;
   window.onhashchange = route;
   route();
 
-  wireScrolling({
-    onScrolledToBottom: addMoreStairs
+  wireEvents({
+    onScrolledToBottom: addMoreStairs,
+    onMouseMove: autoScroll.stopScroll,
+    onClick: toggleAutoScroll,
+    onKeyUp: toggleAutoScroll
   });
 })());
 
@@ -43,6 +51,11 @@ function route() {
 
   probable = createProbable({
     random: seedRandom(seed)
+  });
+
+  autoScroll = AutoScroll({
+    scrollDuration: routeDict.scrollDuration || 45 * 1000,
+    easingFnName: routeDict.easing
   });
 
   addMoreStairs();
@@ -77,6 +90,30 @@ function addMoreStairs() {
     rightLimit: boardWidth,
     floorWidth: boardWidth > 480 ? 4 : 2
   });
+
+  if (autoScrollDesired) {
+    if (noScrollYet) {
+      noScrollYet = false;
+      setTimeout(autoScrollToLastRenderedPoint, 3000);
+    }
+    else {
+      autoScrollToLastRenderedPoint();
+    }
+  }
+
+  function autoScrollToLastRenderedPoint() {
+    autoScroll.scrollTo({targetY: lastRenderedPoint[1]});
+  }
+}
+
+function toggleAutoScroll() {
+  autoScrollDesired = !autoScrollDesired;
+  if (autoScrollDesired) {
+    autoScroll.scrollTo({targetY: lastRenderedPoint[1]});
+  }
+  else {
+    autoScroll.stopScroll();
+  }
 }
 
 function generateFlightSpecs({numberOfFlights, boardWidth, startX, startY}) {

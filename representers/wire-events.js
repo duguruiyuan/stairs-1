@@ -1,6 +1,12 @@
-function wireScrolling({onScrolledToBottom}) {
+var d3 = require('d3-selection');
+
+function wireEvents({onScrolledToBottom, onMouseMove, onClick, onKeyUp}) {
   var notifying = false;
   window.onscroll = respondToScroll;
+
+  d3.select(document).on('mousemove', onMouseMove);
+  d3.select(document).on('click', onClick);
+  d3.select(document).on('keyup', onKeyUp);
 
   function respondToScroll() {
     if (!notifying) {
@@ -18,4 +24,4 @@ function wireScrolling({onScrolledToBottom}) {
 }
 
 
-module.exports = wireScrolling;
+module.exports = wireEvents;

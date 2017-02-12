@@ -28,12 +28,15 @@
   },
   "dependencies": {
     "accessor": "^1.0.1",
+    "d3-ease": "^1.0.2",
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
+    "d3-timer": "^1.0.4",
     "idmaker": "^0.1.1",
     "lodash.clonedeep": "^4.5.0",
     "probable": "^2.1.1",
     "qs": "^6.3.0",
-    "seedrandom": "^2.4.2"
+    "seedrandom": "^2.4.2",
+    "simplescroll": "^2.1.2"
   }
 }
