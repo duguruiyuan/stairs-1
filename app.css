@@ -2,6 +2,7 @@ body {
   font-family: Futura, Helvetica Neue, sans-serif;
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 .stair-line {
